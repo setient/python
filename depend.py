@@ -22,7 +22,7 @@ for line in lines:
 		if 'INSTALL' in elements[0] and len(elements) == 2:
 				elements.remove('INSTALL')
 				#check if package is installed
-				if elements in installedpackages:
+				if elements[-1] in installedpackages:
 					print "   {package}already installed".format(package=elements[-1])
 				elif elements not in installedpackages:
 					key = elements[-1]
