@@ -4,6 +4,7 @@ import sys
 dependencies = {}
 installedpackages = []
 key = ''
+needed = 0
 elements = []
 f = open('pdf_input.dat')
 lines = f.readlines()
@@ -47,12 +48,17 @@ for line in lines:
 		if 'REMOVE' in elements[0] and len(elements) == 2:
 				elements.remove('REMOVE')
 				if elements[-1] in installedpackages:
-					print installedpackages
-					installedpackages.remove(elements[-1])
-					print "   Removing {element}".format(element=elements[-1])
+					for key, value in dependencies.items():
+						if elements[-1] in value:
+							needed = '1'
+					if needed != 1:
+						installedpackages.remove(elements[-1])
+						print "   Removing {element}".format(element=elements[-1])
+					elif needed == 1:
+						print "   {package} is still needed".format(package=elements[-1])
+						needed == 0
 				else:
 					#put an exception here
-					print 
 					print "   {elements} is not installed.".format(elements=elements[-1])
 		elif 'REMOVE' in elements[0] and len(elements) > 2:
 				print "You can only remove one item at a time.  Please correct {line}".format(line=line)
