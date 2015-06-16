@@ -46,10 +46,11 @@ for line in lines:
 						dependencies[key].append(element)
 		if 'REMOVE' in elements[0] and len(elements) == 2:
 				elements.remove('REMOVE')
-				try:
+				if elements[-1] in installedpackages:
+					print installedpackages
 					installedpackages.remove(elements[-1])
-					print "   Removing {elements{".format(element=elements[-1])
-				except:
+					print "   Removing {element}".format(element=elements[-1])
+				else:
 					#put an exception here
 					print 
 					print "   {elements} is not installed.".format(elements=elements[-1])
