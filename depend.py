@@ -46,25 +46,32 @@ for line in lines:
 				for element in elements:
 						dependencies[key].append(element)
 		if 'REMOVE' in elements[0] and len(elements) == 2:
+				needed = 0
 				elements.remove('REMOVE')
 				for key, value in dependencies.items():
-					if elements[-1] in value and value in installedpackages:
-						print value
+					if elements[-1] in value and elements[-1] in installedpackages:
 						needed = needed + 1
-				
 				if elements[-1] in installedpackages and needed == 0:
 					installedpackages.remove(elements[-1])
 					print "   Removing {element}".format(element=elements[-1])
+					for key, value in dependencies.items():
+						if key == elements[-1]:
+							for each in value:
+								print "   Removing {package}".format(package=each)
+								try:
+									installedpackages.remove(each)									
+								except:
+									pass
 				elif needed >= 1 and elements[-1] in installedpackages:
 					if needed == 1 and elements[-1] in installedpackages:
 						for key, value in dependencies.items():
 							if key == elements[-1]:
 								for each in value:
 									print "   Removing {package}".format(package=each)
-						
-					print "   {package} is still needed".format(package=elements[-1])
-					needed == 0
-				else:
+									installedpackages.remove(each)
+					else:
+						print "   {package} is still needed".format(package=elements[-1])
+				elif elements[-1] not in installedpackages:
 					#put an exception here
 					print "   {elements} is not installed.".format(elements=elements[-1])
 		elif 'REMOVE' in elements[0] and len(elements) > 2:
