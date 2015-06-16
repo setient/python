@@ -51,6 +51,7 @@ for line in lines:
 					for key, value in dependencies.items():
 						if elements[-1] in value:
 							needed = '1'
+							print "im needy"
 					if needed != 1:
 						installedpackages.remove(elements[-1])
 						print "   Removing {element}".format(element=elements[-1])
