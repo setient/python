@@ -23,14 +23,14 @@ for line in lines:
 				elements.remove('INSTALL')
 				#check if package is installed
 				if elements[-1] in installedpackages:
-					print "   {package}already installed".format(package=elements[-1])
+					print "   {package} already installed".format(package=elements[-1])
 				elif elements not in installedpackages:
 					key = elements[-1]
 					for element in elements:
 						for key, value in dependencies.items():
 							if key == element:
 								for each in value:
-									if value not in installedpackages:
+									if each not in installedpackages:
 										print "   Installing {package}".format(package=each)
 										installedpackages.append(each)
 						print "   Installing {package}".format(package=element)				
@@ -47,17 +47,23 @@ for line in lines:
 						dependencies[key].append(element)
 		if 'REMOVE' in elements[0] and len(elements) == 2:
 				elements.remove('REMOVE')
-				if elements[-1] in installedpackages:
-					for key, value in dependencies.items():
-						if elements[-1] in value:
-							needed = 1
-					if needed != 1:
-						print "imneedy"
-						installedpackages.remove(elements[-1])
-						print "   Removing {element}".format(element=elements[-1])
-					elif needed == 1:
-						print "   {package} is still needed".format(package=elements[-1])
-						needed == 0
+				for key, value in dependencies.items():
+					if elements[-1] in value and value in installedpackages:
+						print value
+						needed = needed + 1
+				
+				if elements[-1] in installedpackages and needed == 0:
+					installedpackages.remove(elements[-1])
+					print "   Removing {element}".format(element=elements[-1])
+				elif needed >= 1 and elements[-1] in installedpackages:
+					if needed == 1 and elements[-1] in installedpackages:
+						for key, value in dependencies.items():
+							if key == elements[-1]:
+								for each in value:
+									print "   Removing {package}".format(package=each)
+						
+					print "   {package} is still needed".format(package=elements[-1])
+					needed == 0
 				else:
 					#put an exception here
 					print "   {elements} is not installed.".format(elements=elements[-1])
